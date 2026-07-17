@@ -59,6 +59,11 @@ Reading list per the triangulation protocol. Tags: `[MAINSTREAM]` peer-reviewed/
 - Reber, A.S. & Alcock, J.E. (2020). "Searching for the impossible: Parapsychology's elusive quest." *American Psychologist* 75(3), 391–399. doi:10.1037/amp0000486. `[MAINSTREAM]` (web-verified; often cited as 2019 from online-first)
 - Hieronymus, T.G. — US Patent 2,482,773 (1949). `[PRIMARY]` (existence of filing only)
 
+## Consciousness-theory context (for file 13)
+
+- Kuhn, R.L. (2024). "A Landscape of Consciousness: Toward a Taxonomy of Explanations and Implications." *Progress in Biophysics and Molecular Biology*. `[MAINSTREAM]` — neutral taxonomy of 325+ theories.
+- Essentia Foundation (2025), Busstra–Kuhn interview video "All 325+ Competing Consciousness Theories In One Video." `[ADVOCACY-FRAMED]` — idealism-oriented platform; use the paper as the citable object.
+
 ## Fringe sources on file (audited in 06 — not evidence)
 
 - Horowitz, L. & Puleo, J. (1999). *Healing Codes for the Biological Apocalypse*. `[FRINGE — primary source of the solfeggio-frequency claim]`
