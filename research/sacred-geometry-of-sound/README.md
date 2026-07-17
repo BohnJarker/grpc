@@ -39,6 +39,7 @@ Where fringe and mainstream sources disagree, the document includes an explicit 
 | [09-geometry-frequency-physics.md](09-geometry-frequency-physics.md) | The physics primer: how room geometry determines frequency |
 | [10-clinical-evidence-review.md](10-clinical-evidence-review.md) | What clinical research shows about sound-based interventions |
 | [11-sites-supplement.md](11-sites-supplement.md) | Web-verified supplement: China, India, Japan, Egypt, Eleusis, Andes, gaps |
+| [12-frequency-claims-and-the-body.md](12-frequency-claims-and-the-body.md) | Audit of 432/528/639/666/777 Hz, organ-frequency tables, and real body effects |
 
 ## The one-paragraph honest summary
 
