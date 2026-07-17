@@ -27,6 +27,7 @@ Where fringe and mainstream sources disagree, the document includes an explicit 
 
 | File | Contents |
 |---|---|
+| [00-learning-path.md](00-learning-path.md) | Self-study curriculum through sound, with recall questions per stage |
 | [01-research-proposal.md](01-research-proposal.md) | Research questions, hypotheses, scope, and definitions |
 | [02-archaeoacoustics-ancient-sites.md](02-archaeoacoustics-ancient-sites.md) | Site-by-site catalog of measured acoustics at ancient sites |
 | [03-religious-frequency-traditions.md](03-religious-frequency-traditions.md) | How world religions deliberately use sound, pitch, and resonant space |
@@ -34,7 +35,10 @@ Where fringe and mainstream sources disagree, the document includes an explicit 
 | [05-psionics-critical-assessment.md](05-psionics-critical-assessment.md) | "Psionics" and parapsychology: history, government programs, evidence status |
 | [06-claims-audit.md](06-claims-audit.md) | Triangulated audit of specific claims: 432 Hz, solfeggio frequencies, 110 Hz, cymatics, Schumann resonance |
 | [07-methodology.md](07-methodology.md) | How to actually run this research: field measurement and human-subjects protocols |
-| [08-bibliography.md](08-bibliography.md) | Full tagged reading list |
+| [08-bibliography.md](08-bibliography.md) | Full tagged reading list (core citations web-verified 2026-07-17) |
+| [09-geometry-frequency-physics.md](09-geometry-frequency-physics.md) | The physics primer: how room geometry determines frequency |
+| [10-clinical-evidence-review.md](10-clinical-evidence-review.md) | What clinical research shows about sound-based interventions |
+| [11-sites-supplement.md](11-sites-supplement.md) | Web-verified supplement: China, India, Japan, Egypt, Eleusis, Andes, gaps |
 
 ## The one-paragraph honest summary
 

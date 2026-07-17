@@ -2,7 +2,9 @@
 
 Reading list per the triangulation protocol. Tags: `[MAINSTREAM]` peer-reviewed/academic · `[PRIMARY]` original documents/artifacts · `[FRINGE]` sources audited, not endorsed.
 
-> **Verification note:** citations below are from the project authors' knowledge base and standard literature of these fields; before formal publication each should be pulled and page-checked (Track C task). None are invented, but details (volume/page) require confirmation against the originals.
+> **Verification note (updated 2026-07-17):** the 17 core citations were checked against the live web: 15 verified as cited, 1 corrected (Reber & Alcock → 2020, 75(3)), 1 publication-type caveat (Lubman 1998 is an ASA conference abstract, *JASA* 104(3_Suppl), 1763 — not a full article). The Calamassi & Pomponi 432 Hz study is *Explore* 15(4), 283–290 (2019), doi:10.1016/j.explore.2019.04.001, with a 2020 corrigendum — check it before citing results. Remaining uncited-detail items still require page-checking before formal publication.
+>
+> **Field-review anchors (web-verified additions):** *Annual Review of Anthropology* (2025) "Archaeoacoustics: Research on Past Musics and Sounds"; *Applied Sciences* 13(4):2361 (2023) "Archaeoacoustics Around the World" (2016–2022 survey); Kolar (2018) *Acoustics Today* methods overview; and the site-specific sources collected in 11-sites-supplement.md.
 
 ---
 
@@ -54,7 +56,7 @@ Reading list per the triangulation protocol. Tags: `[MAINSTREAM]` peer-reviewed/
 - Bem, D. (2011). "Feeling the future." *JPSP* 100; Galak et al. (2012) and Ritchie, Wiseman & French (2012) failed replications. `[MAINSTREAM]`
 - Utts, J. (1995) & Hyman, R. (1995): AIR evaluation of the Stargate remote-viewing program. `[PRIMARY]` — read both, in full.
 - CIA Stargate collection, CIA FOIA Electronic Reading Room. `[PRIMARY]`
-- Reber, A. & Alcock, J. (2019). "Searching for the impossible: Parapsychology's elusive quarry." *American Psychologist* 75. `[MAINSTREAM]`
+- Reber, A.S. & Alcock, J.E. (2020). "Searching for the impossible: Parapsychology's elusive quest." *American Psychologist* 75(3), 391–399. doi:10.1037/amp0000486. `[MAINSTREAM]` (web-verified; often cited as 2019 from online-first)
 - Hieronymus, T.G. — US Patent 2,482,773 (1949). `[PRIMARY]` (existence of filing only)
 
 ## Fringe sources on file (audited in 06 — not evidence)
