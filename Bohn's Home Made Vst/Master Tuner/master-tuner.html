@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Master Tuner — Retune Any Track to Any Hz</title>
+<style>
+  :root{
+    --bg:#14110c; --surface:#1e1a13; --surface2:#26211a; --ink:#efe9dd;
+    --dim:#b3a794; --faint:#8a7d68; --line:#362f24;
+    --amber:#d9a534; --amber-soft:#e8c877; --teal:#4ea88a; --red:#c8564e;
+  }
+  :root[data-theme=light]{
+    --bg:#f4f0e7; --surface:#fbf8f1; --surface2:#efe8da; --ink:#23201a;
+    --dim:#5f574a; --faint:#8a7f6c; --line:#ddd4c2;
+    --amber:#9a7212; --amber-soft:#b8912e; --teal:#2e7d5b; --red:#b03e36;
+  }
+  @media(prefers-color-scheme:light){:root:not([data-theme=dark]){
+    --bg:#f4f0e7; --surface:#fbf8f1; --surface2:#efe8da; --ink:#23201a;
+    --dim:#5f574a; --faint:#8a7f6c; --line:#ddd4c2;
+    --amber:#9a7212; --amber-soft:#b8912e; --teal:#2e7d5b; --red:#b03e36;
+  }}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"Iowan Old Style",Palatino,Georgia,serif;line-height:1.6;-webkit-font-smoothing:antialiased;padding:2rem 1.25rem 4rem}
+  .sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .wrap{max-width:640px;margin:0 auto}
+  header{text-align:center;margin-bottom:2rem}
+  .eyebrow{font-family:-apple-system,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.24em;font-size:.68rem;color:var(--amber);font-weight:600;margin-bottom:.7rem}
+  h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:600;letter-spacing:-.02em;line-height:1.05}
+  h1 em{color:var(--amber-soft);font-style:italic}
+  .sub{color:var(--dim);margin-top:.7rem;font-size:1.02rem}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.5rem;margin-bottom:1.1rem}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:2.2rem 1rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;color:var(--dim)}
+  .drop:hover,.drop.over{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 8%,transparent)}
+  .drop b{color:var(--ink)}
+  .drop .fname{color:var(--teal);font-weight:600;margin-top:.4rem}
+  label.fld{display:block;font-family:-apple-system,system-ui,sans-serif;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:700;margin-bottom:.5rem}
+  .hzrow{display:flex;gap:1rem;flex-wrap:wrap}
+  .hzcol{flex:1;min-width:130px}
+  input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:8px;color:var(--ink);font-family:"SF Mono",monospace;font-size:1.3rem;font-weight:600;padding:.6rem .8rem;text-align:center}
+  input[type=number]:focus{outline:2px solid var(--amber);border-color:var(--amber)}
+  .presets{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem}
+  .preset{font-family:-apple-system,system-ui,sans-serif;font-size:.8rem;padding:.35rem .7rem;background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:100px;cursor:pointer;transition:all .12s}
+  .preset:hover{border-color:var(--amber);color:var(--amber)}
+  .preset.active{background:var(--amber);border-color:var(--amber);color:var(--bg);font-weight:600}
+  .readout{display:flex;justify-content:space-around;text-align:center;margin:1.4rem 0 .2rem;flex-wrap:wrap;gap:1rem}
+  .ro .v{font-family:"SF Mono",monospace;font-size:1.9rem;font-weight:600;color:var(--amber);font-variant-numeric:tabular-nums;line-height:1}
+  .ro .k{font-family:-apple-system,system-ui,sans-serif;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-top:.35rem}
+  .toggles{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.3rem}
+  .seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex:1;min-width:200px}
+  .seg button{flex:1;font-family:-apple-system,system-ui,sans-serif;font-size:.85rem;padding:.6rem .5rem;background:var(--surface2);border:none;color:var(--dim);cursor:pointer;transition:all .12s}
+  .seg button.on{background:var(--amber);color:var(--bg);font-weight:600}
+  .seg button small{display:block;font-size:.66rem;opacity:.8;margin-top:.1rem}
+  .mono-toggle{display:flex;align-items:center;gap:.6rem;font-family:-apple-system,system-ui,sans-serif;font-size:.9rem;color:var(--dim);cursor:pointer;user-select:none;padding:.6rem .9rem;border:1px solid var(--line);border-radius:8px}
+  .mono-toggle .sw{width:38px;height:22px;background:var(--surface2);border-radius:100px;position:relative;transition:background .15s;flex-shrink:0}
+  .mono-toggle .sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--faint);transition:transform .15s,background .15s}
+  .mono-toggle.on .sw{background:var(--teal)}
+  .mono-toggle.on .sw::after{transform:translateX(16px);background:#fff}
+  .transport{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.4rem}
+  .btn{flex:1;min-width:120px;font-family:-apple-system,system-ui,sans-serif;padding:.85rem 1rem;border-radius:8px;cursor:pointer;font-size:.95rem;font-weight:600;border:1px solid var(--line);background:var(--surface2);color:var(--ink);transition:all .12s}
+  .btn:hover{border-color:var(--amber)}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:var(--bg)}
+  .btn.primary:hover{background:var(--amber-soft)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:transparent}
+  .status{text-align:center;color:var(--faint);font-size:.85rem;font-family:-apple-system,system-ui,sans-serif;min-height:1.4em;margin-top:.9rem}
+  .daw{background:var(--surface2);border-left:3px solid var(--teal);border-radius:8px;padding:1rem 1.2rem;font-size:.92rem;color:var(--dim)}
+  .daw b{color:var(--ink)}
+  .daw .cents{color:var(--teal);font-family:"SF Mono",monospace;font-weight:600}
+  .toggle{position:fixed;top:1rem;right:1rem;font-family:system-ui;font-size:.8rem;background:var(--surface);border:1px solid var(--line);color:var(--dim);padding:.4rem .8rem;border-radius:100px;cursor:pointer;z-index:9}
+  .disabled-area{opacity:.45;pointer-events:none}
+</style>
+</head>
+<body>
+<button class="toggle" onclick="(function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c?c==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setAttribute('data-theme',d?'light':'dark')})()">☀ / ☾</button>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">A real, working master tuner</div>
+    <h1>Retune to <em>Any Hz</em></h1>
+    <p class="sub">Load a track, pick a target reference (432, 444, whatever), hear it, download it. The math is shown, not hidden.</p>
+  </header>
+
+  <div class="card">
+    <input type="file" id="file" accept="audio/*" hidden>
+    <div class="drop" id="drop">
+      <div><b>Drop an audio file here</b> or click to browse</div>
+      <div class="sans" style="font-size:.82rem;margin-top:.3rem">WAV, MP3, FLAC, AIFF…</div>
+      <div class="fname sans" id="fname"></div>
+    </div>
+  </div>
+
+  <div id="controls" class="disabled-area">
+    <div class="card">
+      <div class="hzrow">
+        <div class="hzcol">
+          <label class="fld">Source ref (Hz)</label>
+          <input type="number" id="src" value="440" min="100" max="900" step="0.1">
+        </div>
+        <div class="hzcol">
+          <label class="fld">Target ref (Hz)</label>
+          <input type="number" id="tgt" value="432" min="100" max="900" step="0.1">
+        </div>
+      </div>
+      <div class="presets" id="presets"></div>
+
+      <div class="readout">
+        <div class="ro"><div class="v" id="roRatio">×0.982</div><div class="k">Ratio</div></div>
+        <div class="ro"><div class="v" id="roCents">−31.8</div><div class="k">Cents</div></div>
+        <div class="ro"><div class="v" id="roSemi">−0.32</div><div class="k">Semitones</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label class="fld">Method</label>
+      <div class="toggles">
+        <div class="seg" id="modeSeg">
+          <button data-mode="vari" class="on">Varispeed<small>tape — pitch + tempo, cleanest</small></button>
+          <button data-mode="keep">Keep tempo<small>pitch only — algorithmic</small></button>
+        </div>
+        <div class="mono-toggle sans" id="monoToggle"><div class="sw"></div><span>Mono</span></div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playOrig">▶ Original</button>
+        <button class="btn primary" id="playTuned">▶ Retuned</button>
+        <button class="btn ghost" id="stop">■ Stop</button>
+      </div>
+      <div class="transport" style="margin-top:.6rem">
+        <button class="btn" id="download">⭳ Download retuned WAV</button>
+      </div>
+      <div class="status sans" id="status"></div>
+    </div>
+  </div>
+
+  <div class="card daw sans">
+    <b>Prefer to do it inside your DAW (artifact-free, keeps tempo)?</b><br>
+    Drop a pitch-shifter on your <b>Master</b> track (Ableton: <b>Shifter</b> in Pitch mode) and set it to <span class="cents" id="dawCents">−31.8 cents</span>. That's the exact offset for your current source→target.
+  </div>
+</div>
+
+<script>
+let audioCtx, srcBuffer=null, curSource=null, renderCache={};
+const $=id=>document.getElementById(id);
+const PRESETS=[
+  {hz:432,name:"432 (Verdi)"},{hz:440,name:"440 (standard)"},
+  {hz:444,name:"444"},{hz:415.3,name:"415 (Baroque)"},{hz:528,name:"528"},{hz:396,name:"396"}
+];
+
+// build presets
+const pc=$('presets');
+PRESETS.forEach(p=>{
+  const b=document.createElement('button');
+  b.className='preset';b.textContent=p.name;b.dataset.hz=p.hz;
+  b.onclick=()=>{$('tgt').value=p.hz;refresh()};
+  pc.appendChild(b);
+});
+
+function ctx(){ if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)(); return audioCtx; }
+
+// ---- math readout ----
+function ratio(){ const s=parseFloat($('src').value)||440, t=parseFloat($('tgt').value)||440; return t/s; }
+function refresh(){
+  const r=ratio(), cents=1200*Math.log2(r), semi=cents/100;
+  $('roRatio').textContent='×'+r.toFixed(3);
+  $('roCents').textContent=(cents>=0?'+':'−')+Math.abs(cents).toFixed(1);
+  $('roSemi').textContent=(semi>=0?'+':'−')+Math.abs(semi).toFixed(2);
+  $('dawCents').textContent=(cents>=0?'+':'−')+Math.abs(cents).toFixed(1)+' cents';
+  // active preset highlight
+  document.querySelectorAll('.preset').forEach(b=>b.classList.toggle('active',Math.abs(parseFloat(b.dataset.hz)-parseFloat($('tgt').value))<0.05));
+  renderCache={}; // invalidate
+}
+$('src').oninput=refresh; $('tgt').oninput=refresh;
+
+// ---- file load ----
+const drop=$('drop');
+drop.onclick=()=>$('file').click();
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=e=>{e.preventDefault();drop.classList.remove('over');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0])};
+$('file').onchange=e=>{if(e.target.files[0])loadFile(e.target.files[0])};
+
+async function loadFile(f){
+  $('status').textContent='Decoding…';
+  try{
+    const buf=await f.arrayBuffer();
+    srcBuffer=await ctx().decodeAudioData(buf);
+    $('fname').textContent=f.name+' · '+srcBuffer.duration.toFixed(1)+'s · '+srcBuffer.numberOfChannels+'ch';
+    $('controls').classList.remove('disabled-area');
+    $('status').textContent='Ready.';
+    renderCache={};
+  }catch(err){ $('status').textContent='Could not decode that file: '+err.message; }
+}
+
+// ---- DSP ----
+function resampleRead(input, step){ // out[n]=input[n*step]; pitch×step, dur×1/step
+  const outLen=Math.floor(input.length/step), out=new Float32Array(outLen);
+  for(let n=0;n<outLen;n++){
+    const pos=n*step, i=Math.floor(pos), frac=pos-i;
+    const a=input[i]||0, b=input[i+1]||0;
+    out[n]=a+(b-a)*frac;
+  }
+  return out;
+}
+function olaScale(input, S){ // time-scale by S (length×S), pitch preserved
+  const N=2048, Hs=N/4, Ha=Hs/S;
+  const outLen=Math.max(1,Math.floor(input.length*S));
+  const out=new Float32Array(outLen), norm=new Float32Array(outLen);
+  const win=new Float32Array(N);
+  for(let j=0;j<N;j++) win[j]=0.5*(1-Math.cos(2*Math.PI*j/(N-1)));
+  const frames=Math.floor((input.length-N)/Ha);
+  for(let i=0;i<=frames;i++){
+    const as=Math.round(i*Ha), ss=Math.round(i*Hs);
+    for(let j=0;j<N;j++){
+      const si=ss+j; if(si>=outLen) break;
+      const x=input[as+j]||0;
+      out[si]+=x*win[j]; norm[si]+=win[j];
+    }
+  }
+  for(let n=0;n<outLen;n++) if(norm[n]>1e-6) out[n]/=norm[n];
+  return out;
+}
+function processChannel(ch, r, keepTempo){
+  let y=resampleRead(ch, r);          // pitch×r, dur×1/r  (this IS varispeed)
+  if(keepTempo) y=olaScale(y, r);     // compress back to original duration, pitch kept
+  return y;
+}
+function renderBuffer(){
+  const r=ratio(), keep=$('modeSeg').querySelector('.on').dataset.mode==='keep';
+  const mono=$('monoToggle').classList.contains('on');
+  const key=r.toFixed(5)+(keep?'k':'v')+(mono?'m':'s');
+  if(renderCache[key]) return renderCache[key];
+  const nch=srcBuffer.numberOfChannels;
+  let channels=[];
+  if(mono){
+    const mix=new Float32Array(srcBuffer.length);
+    for(let c=0;c<nch;c++){const d=srcBuffer.getChannelData(c);for(let i=0;i<mix.length;i++)mix[i]+=d[i]/nch;}
+    channels=[processChannel(mix,r,keep)];
+  }else{
+    for(let c=0;c<nch;c++) channels.push(processChannel(srcBuffer.getChannelData(c),r,keep));
+  }
+  const outLen=channels[0].length;
+  const ab=ctx().createBuffer(channels.length,outLen,srcBuffer.sampleRate);
+  channels.forEach((ch,i)=>ab.copyToChannel(ch,i));
+  renderCache[key]=ab;
+  return ab;
+}
+
+// ---- playback ----
+function stopAll(){ if(curSource){try{curSource.stop()}catch(e){} curSource=null;} }
+function playBuffer(buf){
+  stopAll(); ctx().resume();
+  const s=ctx().createBufferSource(); s.buffer=buf; s.connect(ctx().destination); s.start();
+  curSource=s; s.onended=()=>{if(curSource===s)curSource=null;};
+}
+$('playOrig').onclick=()=>{ if(srcBuffer) playBuffer(srcBuffer); };
+$('playTuned').onclick=()=>{
+  if(!srcBuffer) return;
+  $('status').textContent='Rendering…';
+  setTimeout(()=>{ try{ playBuffer(renderBuffer()); $('status').textContent='Playing retuned.'; }
+    catch(e){ $('status').textContent='Error: '+e.message; } },10);
+};
+$('stop').onclick=stopAll;
+
+// ---- mode / mono toggles ----
+$('modeSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('modeSeg').querySelectorAll('button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); renderCache={};
+});
+$('monoToggle').onclick=()=>{ $('monoToggle').classList.toggle('on'); renderCache={}; };
+
+// ---- WAV export ----
+function encodeWAV(buf){
+  const nch=buf.numberOfChannels, len=buf.length, sr=buf.sampleRate;
+  const data=new DataView(new ArrayBuffer(44+len*nch*2));
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)data.setUint8(o+i,s.charCodeAt(i))};
+  w(0,'RIFF'); data.setUint32(4,36+len*nch*2,true); w(8,'WAVE'); w(12,'fmt ');
+  data.setUint32(16,16,true); data.setUint16(20,1,true); data.setUint16(22,nch,true);
+  data.setUint32(24,sr,true); data.setUint32(28,sr*nch*2,true); data.setUint16(32,nch*2,true);
+  data.setUint16(34,16,true); w(36,'data'); data.setUint32(40,len*nch*2,true);
+  let off=44;
+  const chans=[]; for(let c=0;c<nch;c++) chans.push(buf.getChannelData(c));
+  for(let i=0;i<len;i++) for(let c=0;c<nch;c++){
+    let v=Math.max(-1,Math.min(1,chans[c][i]));
+    data.setInt16(off,v<0?v*0x8000:v*0x7FFF,true); off+=2;
+  }
+  return new Blob([data],{type:'audio/wav'});
+}
+$('download').onclick=()=>{
+  if(!srcBuffer) return;
+  $('status').textContent='Rendering WAV…';
+  setTimeout(()=>{
+    try{
+      const blob=encodeWAV(renderBuffer());
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=$('tgt').value+'Hz_retuned.wav';
+      a.click();
+      $('status').textContent='Downloaded '+a.download;
+    }catch(e){ $('status').textContent='Export error: '+e.message; }
+  },10);
+};
+
+refresh();
+</script>
+</body>
+</html>
