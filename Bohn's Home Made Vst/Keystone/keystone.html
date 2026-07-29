@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keystone · Geo-Verb — Geometric Psychoacoustic Environment</title>
+<style>
+  :root{
+    --bg:#100e14;--surface:#1a1722;--surface2:#242030;--ink:#ece9f2;
+    --dim:#a8a2bd;--faint:#746e8c;--line:#2e2a40;
+    --amber:#d9a534;--amber-soft:#e8c877;--stone:#c9a86a;--teal:#5bb98c;--violet:#9a7bc4;
+  }
+  :root[data-theme=light]{
+    --bg:#f1eff5;--surface:#faf9fc;--surface2:#ebe8f2;--ink:#201d2a;
+    --dim:#57516a;--faint:#837c96;--line:#ddd8ea;
+    --amber:#8a6d1e;--amber-soft:#a5842e;--stone:#8a6d2e;--teal:#2e7d5b;--violet:#6f52a0;
+  }
+  @media(prefers-color-scheme:light){:root:not([data-theme=dark]){
+    --bg:#f1eff5;--surface:#faf9fc;--surface2:#ebe8f2;--ink:#201d2a;
+    --dim:#57516a;--faint:#837c96;--line:#ddd8ea;
+    --amber:#8a6d1e;--amber-soft:#a5842e;--stone:#8a6d2e;--teal:#2e7d5b;--violet:#6f52a0;
+  }}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--ink);font-family:"Iowan Old Style",Palatino,Georgia,serif;line-height:1.55;-webkit-font-smoothing:antialiased;padding:1.5rem 1.1rem 4rem}
+  .sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  .mono{font-family:"SF Mono",Menlo,Consolas,monospace}
+  .wrap{max-width:720px;margin:0 auto}
+  header{text-align:center;margin-bottom:1.4rem}
+  .brand{font-family:-apple-system,system-ui,sans-serif;letter-spacing:.4em;text-transform:uppercase;font-size:.7rem;color:var(--amber);font-weight:700}
+  h1{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:600;letter-spacing:-.02em;margin-top:.3rem}
+  h1 em{color:var(--amber-soft);font-style:italic}
+  .tag{color:var(--dim);font-size:.98rem;margin-top:.3rem}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.3rem;margin-bottom:1rem}
+  .envname{width:100%;background:transparent;border:none;border-bottom:1px dashed var(--line);color:var(--ink);font-family:"Iowan Old Style",Palatino,serif;font-size:1.5rem;font-weight:600;text-align:center;padding:.3rem 0 .5rem}
+  .envname:focus{outline:none;border-bottom-color:var(--amber)}
+  .envlabel{text-align:center;font-family:-apple-system,system-ui,sans-serif;font-size:.66rem;text-transform:uppercase;letter-spacing:.18em;color:var(--faint);margin-bottom:.2rem}
+  .presets{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-top:.9rem}
+  .preset{font-family:-apple-system,system-ui,sans-serif;font-size:.78rem;padding:.35rem .7rem;background:transparent;border:1px solid var(--line);color:var(--dim);border-radius:100px;cursor:pointer;transition:all .12s}
+  .preset:hover{border-color:var(--amber);color:var(--amber)}
+  .preset.active{background:var(--amber);border-color:var(--amber);color:var(--bg);font-weight:600}
+  .preset .grp{opacity:.55;font-size:.7rem}
+  .knobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1.1rem 1.3rem}
+  .knob label{display:flex;justify-content:space-between;font-family:-apple-system,system-ui,sans-serif;font-size:.76rem;color:var(--dim);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em}
+  .knob label .val{color:var(--amber);font-family:"SF Mono",monospace;font-weight:600}
+  .knob .ends{display:flex;justify-content:space-between;font-family:-apple-system,system-ui,sans-serif;font-size:.66rem;color:var(--faint);margin-top:.2rem}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;background:var(--surface2);border-radius:3px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:19px;height:19px;border-radius:50%;background:var(--amber);cursor:pointer;border:3px solid var(--bg);box-shadow:0 0 0 1px var(--amber)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--amber);cursor:pointer;border:3px solid var(--bg)}
+  .readout{display:flex;justify-content:space-around;text-align:center;gap:.8rem;flex-wrap:wrap;margin-top:.3rem}
+  .ro .v{font-family:"SF Mono",monospace;font-size:1.5rem;font-weight:600;color:var(--stone);font-variant-numeric:tabular-nums}
+  .ro .k{font-family:-apple-system,system-ui,sans-serif;font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-top:.25rem}
+  .row{display:flex;gap:.6rem;flex-wrap:wrap}
+  .btn{flex:1;min-width:110px;font-family:-apple-system,system-ui,sans-serif;padding:.8rem 1rem;border-radius:8px;cursor:pointer;font-size:.92rem;font-weight:600;border:1px solid var(--line);background:var(--surface2);color:var(--ink);transition:all .12s}
+  .btn:hover{border-color:var(--amber)}
+  .btn.primary{background:var(--amber);border-color:var(--amber);color:var(--bg)}
+  .btn.primary:hover{background:var(--amber-soft)}
+  .btn.ghost{background:transparent}
+  .mono-t{display:flex;align-items:center;gap:.55rem;font-family:-apple-system,system-ui,sans-serif;font-size:.85rem;color:var(--dim);cursor:pointer;user-select:none;padding:.55rem .85rem;border:1px solid var(--line);border-radius:8px}
+  .mono-t .sw{width:36px;height:21px;background:var(--surface2);border-radius:100px;position:relative;transition:.15s;flex-shrink:0}
+  .mono-t .sw::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:var(--faint);transition:.15s}
+  .mono-t.on .sw{background:var(--teal)}
+  .mono-t.on .sw::after{transform:translateX(15px);background:#fff}
+  .status{text-align:center;color:var(--faint);font-size:.83rem;font-family:-apple-system,system-ui,sans-serif;min-height:1.3em;margin-top:.8rem}
+  .note{font-size:.82rem;color:var(--faint);font-family:-apple-system,system-ui,sans-serif;text-align:center;margin-top:.5rem}
+  .toggle{position:fixed;top:1rem;right:1rem;font-family:system-ui;font-size:.8rem;background:var(--surface);border:1px solid var(--line);color:var(--dim);padding:.4rem .8rem;border-radius:100px;cursor:pointer;z-index:9}
+  canvas{width:100%;height:70px;display:block;margin-top:.4rem;border-radius:6px;background:var(--surface2)}
+</style>
+</head>
+<body>
+<button class="toggle" onclick="(function(){var r=document.documentElement,c=r.getAttribute('data-theme'),d=c?c==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.setAttribute('data-theme',d?'light':'dark')})()">☀ / ☾</button>
+<div class="wrap">
+  <header>
+    <div class="brand">Bohn's Home Made Vst</div>
+    <h1>Keystone · <em>Geo-Verb</em></h1>
+    <div class="tag">A geometric psychoacoustic environment. Sound enters — and is transported into the space you build.</div>
+  </header>
+
+  <div class="card">
+    <div class="envlabel sans">Now entering</div>
+    <input class="envname" id="envname" value="King's Chamber" spellcheck="false">
+    <div class="presets" id="presets"></div>
+  </div>
+
+  <div class="card">
+    <div class="knobs">
+      <div class="knob"><label>Size <span class="val" id="vSize">1.00×</span></label><input type="range" id="size" min="0.3" max="3" step="0.01" value="1"><div class="ends"><span>intimate</span><span>colossal</span></div></div>
+      <div class="knob"><label>Width <span class="val" id="vWidth">5.2 m</span></label><input type="range" id="width" min="1" max="40" step="0.1" value="5.23"><div class="ends"><span>narrow</span><span>wide</span></div></div>
+      <div class="knob"><label>Height <span class="val" id="vHeight">5.8 m</span></label><input type="range" id="height" min="1" max="60" step="0.1" value="5.81"><div class="ends"><span>low</span><span>soaring</span></div></div>
+      <div class="knob"><label>Depth · Breath <span class="val" id="vDepth">10.5 m</span></label><input type="range" id="depth" min="1" max="80" step="0.1" value="10.47"><div class="ends"><span>shallow</span><span>deep</span></div></div>
+      <div class="knob"><label>Roundness <span class="val" id="vRound">5%</span></label><input type="range" id="round" min="0" max="1" step="0.01" value="0.05"><div class="ends"><span>90° sharp</span><span>rounded</span></div></div>
+      <div class="knob"><label>Absorption <span class="val" id="vAbs">0.03</span></label><input type="range" id="abs" min="0.02" max="0.6" step="0.005" value="0.03"><div class="ends"><span>live stone</span><span>damped</span></div></div>
+      <div class="knob"><label>Projection <span class="val" id="vProj">35%</span></label><input type="range" id="proj" min="0.05" max="0.95" step="0.01" value="0.35"><div class="ends"><span>near wall</span><span>far wall</span></div></div>
+      <div class="knob"><label>Mix <span class="val" id="vMix">35%</span></label><input type="range" id="mix" min="0" max="1" step="0.01" value="0.35"><div class="ends"><span>dry</span><span>immersed</span></div></div>
+    </div>
+    <canvas id="irview" width="700" height="70"></canvas>
+    <div class="readout" style="margin-top:.9rem">
+      <div class="ro"><div class="v" id="roRT">1.2 s</div><div class="k">Reverb (RT60)</div></div>
+      <div class="ro"><div class="v" id="roVol">318 m³</div><div class="k">Volume</div></div>
+      <div class="ro"><div class="v" id="roMode">33 Hz</div><div class="k">Lowest mode</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <input type="file" id="file" accept="audio/*" hidden>
+    <div class="row">
+      <button class="btn" id="load">⭳ Load a sound</button>
+      <button class="btn" id="clap">👏 Test clap</button>
+      <div class="mono-t sans" id="monoT"><div class="sw"></div><span>Mono</span></div>
+    </div>
+    <div class="row" style="margin-top:.6rem">
+      <button class="btn primary" id="play">▶ Play through Keystone</button>
+      <button class="btn ghost" id="stop">■ Stop</button>
+    </div>
+    <div class="status sans" id="status">Load a sound or hit Test clap to hear the space.</div>
+  </div>
+
+  <div class="note sans">v0.2.0 · Browser prototype (rung 🔊) — works fully offline. Not a compiled VST yet. The reverb is real: a convolution impulse response generated live from the room geometry.</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let ac, srcBuf=null, chain=null, playing=null, irData=null, rebuildTimer=null;
+
+// ---- Presets: [W,H,D] meters, absorption, roundness ----
+const PRESETS=[
+  {n:"King's Chamber",g:"Giza",W:5.23,H:5.81,D:10.47,a:0.03,r:0.05},
+  {n:"Queen's Chamber",g:"Giza",W:5.23,H:6.26,D:5.75,a:0.04,r:0.10},
+  {n:"Grand Gallery",g:"Giza",W:2.06,H:8.60,D:46.7,a:0.04,r:0.15},
+  {n:"Subterranean Chamber",g:"Giza",W:8.0,H:3.5,D:14.0,a:0.08,r:0.20},
+  {n:"Oracle Room",g:"Hypogeum",W:3.5,H:2.5,D:5.0,a:0.05,r:0.30},
+  {n:"Newgrange Chamber",g:"Ireland",W:6.0,H:6.0,D:6.0,a:0.06,r:0.55},
+  {n:"Hagia Sophia",g:"Byzantium",W:31,H:55,D:70,a:0.06,r:0.70},
+];
+
+const pc=$('presets');
+PRESETS.forEach((p,i)=>{
+  const b=document.createElement('button');
+  b.className='preset';b.innerHTML=p.n+' <span class="grp">'+p.g+'</span>';
+  b.onclick=()=>applyPreset(p,b);
+  if(i===0) b.classList.add('active');
+  pc.appendChild(b);
+});
+function applyPreset(p,btn){
+  document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  $('envname').value=p.n;
+  $('size').value=1; $('width').value=p.W; $('height').value=p.H; $('depth').value=p.D;
+  $('abs').value=p.a; $('round').value=p.r;
+  refresh(); scheduleRebuild();
+}
+
+function ctx(){ if(!ac){ ac=new (window.AudioContext||window.webkitAudioContext)(); buildChain(); } return ac; }
+function buildChain(){
+  const master=ac.createGain(); master.connect(ac.destination);
+  const dry=ac.createGain(), wet=ac.createGain();
+  const conv=ac.createConvolver(); conv.normalize=false;
+  dry.connect(master); conv.connect(wet); wet.connect(master);
+  chain={master,dry,wet,conv};
+  applyMix(); rebuildIR();
+}
+
+// ---- readouts ----
+function P(){ return {
+  size:+$('size').value, W:+$('width').value, H:+$('height').value, D:+$('depth').value,
+  round:+$('round').value, abs:+$('abs').value, proj:+$('proj').value, mix:+$('mix').value
+};}
+function refresh(){
+  const p=P();
+  $('vSize').textContent=p.size.toFixed(2)+'×';
+  $('vWidth').textContent=(p.W*p.size).toFixed(1)+' m';
+  $('vHeight').textContent=(p.H*p.size).toFixed(1)+' m';
+  $('vDepth').textContent=(p.D*p.size).toFixed(1)+' m';
+  $('vRound').textContent=Math.round(p.round*100)+'%';
+  $('vAbs').textContent=p.abs.toFixed(3);
+  $('vProj').textContent=Math.round(p.proj*100)+'%';
+  $('vMix').textContent=Math.round(p.mix*100)+'%';
+  const L=p.D*p.size,W=p.W*p.size,H=p.H*p.size;
+  const V=L*W*H, S=2*(L*W+L*H+W*H);
+  let RT=0.161*V/Math.max(0.5,S*p.abs); RT=Math.min(Math.max(RT,0.15),6);
+  $('roRT').textContent=RT.toFixed(2)+' s';
+  $('roVol').textContent=Math.round(V)+' m³';
+  $('roMode').textContent=Math.round(343/(2*Math.max(L,W,H)))+' Hz';
+}
+function applyMix(){ if(!chain) return; const m=P().mix;
+  chain.dry.gain.value=Math.cos(m*Math.PI/2); chain.wet.gain.value=Math.sin(m*Math.PI/2);
+}
+
+// ---- IR generation ----
+function earlyReflections(L,W,H,a,proj){
+  const c=343, refl=Math.sqrt(Math.max(0.001,1-a));
+  const lp=[L/2,W/2,H/2], sp=[L*proj,W/2,H*0.4];
+  const taps=[], O=2;
+  for(let mx=-O;mx<=O;mx++)for(let my=-O;my<=O;my++)for(let mz=-O;mz<=O;mz++){
+    const ix=mx*L+((Math.abs(mx)&1)?(L-sp[0]):sp[0]);
+    const iy=my*W+((Math.abs(my)&1)?(W-sp[1]):sp[1]);
+    const iz=mz*H+((Math.abs(mz)&1)?(H-sp[2]):sp[2]);
+    const dist=Math.hypot(ix-lp[0],iy-lp[1],iz-lp[2]);
+    if(dist<0.3) continue;
+    const order=Math.abs(mx)+Math.abs(my)+Math.abs(mz);
+    taps.push({t:dist/c,g:Math.pow(refl,order)/dist});
+  }
+  return taps;
+}
+function rebuildIR(){
+  if(!chain) return;
+  const p=P(); const L=p.D*p.size,W=p.W*p.size,H=p.H*p.size;
+  const V=L*W*H,S=2*(L*W+L*H+W*H);
+  let RT=0.161*V/Math.max(0.5,S*p.abs); RT=Math.min(Math.max(RT,0.15),6);
+  const sr=ac.sampleRate, len=Math.max(64,Math.floor(RT*sr));
+  const ir=ac.createBuffer(2,len,sr);
+  const taps=earlyReflections(L,W,H,p.abs,p.proj);
+  const spread=Math.floor(p.round*0.03*sr)+1;
+  for(let c0=0;c0<2;c0++){
+    const d=ir.getChannelData(c0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.exp(-6.9*i/len);
+    const lr=c0===0?1:0.9;
+    for(const tp of taps){
+      const idx=Math.floor(tp.t*sr); if(idx>=len) continue;
+      if(spread<=1){ d[idx]+=tp.g*lr; }
+      else{ for(let k=0;k<spread;k++){ const j=idx+k; if(j>=len)break;
+        d[j]+=tp.g*lr*(Math.random()*2-1)*Math.exp(-4*k/spread)/Math.sqrt(spread); } }
+    }
+    let mx=1e-6; for(let i=0;i<len;i++) mx=Math.max(mx,Math.abs(d[i]));
+    for(let i=0;i<len;i++) d[i]/=mx*1.6;
+  }
+  chain.conv.buffer=ir; irData=ir;
+  drawIR();
+}
+function scheduleRebuild(){ if(!ac) return; clearTimeout(rebuildTimer); rebuildTimer=setTimeout(rebuildIR,70); }
+
+function drawIR(){
+  const cv=$('irview'), g=cv.getContext('2d');
+  const w=cv.width,h=cv.height; g.clearRect(0,0,w,h);
+  if(!irData) return;
+  const d=irData.getChannelData(0), n=d.length;
+  const light=(document.documentElement.getAttribute('data-theme')==='light')||(!document.documentElement.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: light)').matches);
+  g.strokeStyle=light?'rgba(138,109,46,.8)':'rgba(217,165,52,.75)'; g.lineWidth=1;
+  g.beginPath();
+  for(let x=0;x<w;x++){
+    let peak=0; const a=Math.floor(x/w*n), b=Math.floor((x+1)/w*n);
+    for(let i=a;i<b;i++) peak=Math.max(peak,Math.abs(d[i]));
+    const y=h/2-peak*(h/2-2); g.moveTo(x,h/2+peak*(h/2-2)); g.lineTo(x,y);
+  }
+  g.stroke();
+}
+
+// ---- controls ----
+['size','width','height','depth','round','abs','proj'].forEach(id=>{
+  $(id).addEventListener('input',()=>{ refresh(); scheduleRebuild(); });
+});
+$('mix').addEventListener('input',()=>{ refresh(); applyMix(); });
+$('monoT').onclick=()=>{ $('monoT').classList.toggle('on'); };
+
+// ---- file / sources ----
+$('load').onclick=()=>$('file').click();
+$('file').onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  $('status').textContent='Decoding '+f.name+'…';
+  try{ srcBuf=await ctx().decodeAudioData(await f.arrayBuffer());
+    $('status').textContent='Loaded: '+f.name+' — hit Play.'; }
+  catch(err){ $('status').textContent='Could not decode: '+err.message; }
+};
+function monoize(buf){
+  if(buf.numberOfChannels===1) return buf;
+  const m=ctx().createBuffer(1,buf.length,buf.sampleRate), o=m.getChannelData(0);
+  for(let c=0;c<buf.numberOfChannels;c++){ const d=buf.getChannelData(c); for(let i=0;i<d.length;i++) o[i]+=d[i]/buf.numberOfChannels; }
+  return m;
+}
+function playBuf(buf,loop){
+  ctx().resume(); stop();
+  let b=$('monoT').classList.contains('on')?monoize(buf):buf;
+  const s=ac.createBufferSource(); s.buffer=b; s.loop=loop;
+  s.connect(chain.dry); s.connect(chain.conv); s.start();
+  playing=s; s.onended=()=>{ if(playing===s) playing=null; };
+}
+function stop(){ if(playing){ try{playing.stop()}catch(e){} playing=null; } }
+function makeClap(){
+  const sr=ctx().sampleRate, len=Math.floor(sr*0.04);
+  const b=ac.createBuffer(1,len,sr), d=b.getChannelData(0);
+  for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.exp(-30*i/len);
+  return b;
+}
+$('clap').onclick=()=>{ playBuf(makeClap(),false); $('status').textContent='Clap in “'+$('envname').value+'”.'; };
+$('play').onclick=()=>{ if(!srcBuf){ $('status').textContent='Load a sound first (or use Test clap).'; return; }
+  playBuf(srcBuf,true); $('status').textContent='Playing through “'+$('envname').value+'”.'; };
+$('stop').onclick=stop;
+
+refresh();
+</script>
+</body>
+</html>

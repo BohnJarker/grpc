@@ -41,8 +41,8 @@ Presets store full geometry + material + roundness + a name. Built from real pub
 - **Chavín de Huántar** — the sound-maze galleries
 
 ## Build ladder (see workspace README)
-- [ ] 📋 Spec ← **you are here**
-- [ ] 🔊 Browser prototype (Web Audio convolution, geometry-driven IR, first presets)
+- [x] 📋 Spec
+- [x] 🔊 Browser prototype — `keystone.html` (Web Audio convolution, geometry-driven IR, 7 presets) ← **you are here**
 - [ ] 🎛️ Max for Live
 - [ ] 💿 VST3/AU (JUCE)
 

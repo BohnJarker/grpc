@@ -23,8 +23,8 @@ Bohn's personal plugin workspace and **update system**. Everything here lives in
 
 | Plugin | What it does | Status |
 |---|---|---|
-| **Keystone** | Geometric psychoacoustic environment — a reverb that transports sound into simulated ancient chambers (every wonder as a preset) | 📋 spec written, prototype next |
-| **Master Tuner** | Retunes any track from 440 to 432 / any Hz | ✅ working browser prototype |
+| **Keystone** | Geometric psychoacoustic environment — a reverb that transports sound into simulated ancient chambers (every wonder as a preset) | 🔊 working browser prototype (v0.2.0) |
+| **Master Tuner** | Retunes any track from 440 to 432 / any Hz | 🔊 working browser prototype (v0.1.0) |
 
 ## Status legend & the honest ladder
 
