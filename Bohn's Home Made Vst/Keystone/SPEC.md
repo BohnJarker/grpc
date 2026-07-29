@@ -42,9 +42,9 @@ Presets store full geometry + material + roundness + a name. Built from real pub
 
 ## Build ladder (see workspace README)
 - [x] 📋 Spec
-- [x] 🔊 Browser prototype — `keystone.html` (Web Audio convolution, geometry-driven IR, 7 presets) ← **you are here**
+- [x] 🔊 Browser prototype — `keystone.html` (Web Audio convolution, geometry-driven IR, 7 presets)
 - [ ] 🎛️ Max for Live
-- [ ] 💿 VST3/AU (JUCE)
+- [~] 💿 VST3/AU (JUCE) — **codebase written** (`Keystone-JUCE/`), needs build + tuning ← **you are here**
 
 ## Honest notes
 - Presets are physically-grounded *approximations* — real chambers are irregular; published dimensions vary by source. Each preset should cite its dimension source when added.
